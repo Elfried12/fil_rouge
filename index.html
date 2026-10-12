@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/script.js" defer></script>
 </head>
-<body>
+<body class="dark-theme">
 
   <a class="skip-link" href="#contenu-principal">Aller au contenu principal</a>
 
@@ -52,6 +52,8 @@
             <li><a href="#connexion">Se déconnecter</a></li>
           </ul>
         </div>
+
+        <button type="button" id="bouton-theme" class="theme-toggle">Mode clair</button>
       </div>
 
     </div>
@@ -419,6 +421,14 @@
 
     <p class="copyright"><small>&copy; 2025 StreamFlix. Tous droits réservés.</small></p>
   </footer>
+
+  <!-- ============ MODAL (ouverte en JavaScript) ============ -->
+  <div id="modal" class="modal">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-titre">
+      <button type="button" class="close" aria-label="Fermer">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
 
 </body>
 </html>
