@@ -1,0 +1,809 @@
+/* ==========================================================================
+   STREAMFLIX – style.css (CSS natif, mobile-first)
+   Sommaire :
+   1. Charte graphique (variables)
+   2. Reset & base
+   3. Utilitaires d'accessibilité
+   4. Header & navigation
+   5. Hero
+   6. Boutons
+   7. Grilles de films
+   8. Formulaire d'inscription
+   9. Footer
+   10. Tablette (≥ 768px)
+   11. Desktop (≥ 1024px)
+   12. Préférences utilisateur (animations réduites)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. CHARTE GRAPHIQUE
+   ========================================================================== */
+:root {
+  /* Couleurs */
+  --color-bg: #141414;
+  --color-surface: #1f1f1f;
+  --color-surface-hover: #2b2b2b;
+  --color-primary: #e50914;
+  --color-primary-hover: #f6121d;
+  --color-text: #ffffff;
+  --color-text-muted: #b3b3b3;
+  --color-border: #333333;
+  --color-star: #f5c518;
+
+  /* Typographies */
+  --font-main: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-hero: clamp(2.25rem, 8vw, 4.5rem);
+
+  /* Espacements */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+
+  /* Divers */
+  --radius: 6px;
+  --header-height: 64px;
+  --max-width: 1400px;
+  --transition: 0.25s ease;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+
+/* ==========================================================================
+   2. RESET & BASE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Focus clavier visible partout */
+:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+
+/* ==========================================================================
+   3. UTILITAIRES D'ACCESSIBILITÉ
+   ========================================================================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-md);
+  z-index: 200;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  border-radius: var(--radius);
+  transition: top var(--transition);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+
+/* ==========================================================================
+   4. HEADER & NAVIGATION (mobile : logo + zone user, menu dessous)
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.85));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-md);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.logo img {
+  width: auto;
+  height: 32px;
+  transition: transform var(--transition);
+}
+
+.logo:hover img,
+.logo:focus-visible img {
+  transform: scale(1.05);
+}
+
+/* Menu principal : défilable horizontalement sur mobile */
+#navigation-principale {
+  order: 3;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.menu {
+  display: flex;
+  gap: var(--space-lg);
+  white-space: nowrap;
+}
+
+.menu a {
+  position: relative;
+  display: inline-block;
+  padding: var(--space-xs) 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* Soulignement animé */
+.menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.menu a:hover,
+.menu a:focus-visible,
+.menu a[aria-current="page"] {
+  color: var(--color-text);
+}
+
+.menu a:hover::after,
+.menu a:focus-visible::after,
+.menu a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Zone utilisateur : recherche + profil */
+.user-zone {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.search-form:hover,
+.search-form:focus-within {
+  border-color: var(--color-text);
+  background: #000;
+}
+
+.search-form input {
+  width: 110px;
+  padding: var(--space-sm);
+  background: transparent;
+  border: 0;
+  transition: width var(--transition);
+}
+
+.search-form input:focus {
+  width: 150px;
+  outline: none; /* le focus est visible via le conteneur */
+}
+
+.search-form button,
+#bouton-profil {
+  padding: var(--space-sm);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
+}
+
+.search-form button:hover,
+#bouton-profil:hover {
+  background: var(--color-surface-hover);
+  transform: scale(1.1);
+}
+
+/* Menu profil (déroulant) */
+.profile-menu {
+  position: relative;
+}
+
+#menu-profil {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--space-sm));
+  min-width: 190px;
+  padding: var(--space-sm) 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* Ouverture au survol / focus clavier, même sans JavaScript */
+.profile-menu:hover #menu-profil[hidden],
+.profile-menu:focus-within #menu-profil[hidden] {
+  display: block;
+}
+
+#menu-profil a {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--fs-sm);
+}
+
+#menu-profil a:hover,
+#menu-profil a:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-primary);
+}
+
+
+/* ==========================================================================
+   5. HERO
+   ========================================================================== */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 75vh;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Overlay : garantit la lisibilité du texte */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--color-bg) 0%, rgba(20, 20, 20, 0.2) 60%, rgba(0, 0, 0, 0.5) 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.7), transparent 70%);
+}
+
+.hero-content {
+  position: relative; /* au-dessus de l'overlay */
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.hero-label {
+  margin-bottom: var(--space-sm);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.hero h1 {
+  font-size: var(--fs-hero);
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.hero-description {
+  max-width: 55ch;
+  margin: var(--space-md) 0 var(--space-lg);
+  font-size: var(--fs-base);
+  color: #e5e5e5;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Métadonnées (année · durée · note) et genres : partagés avec les cartes */
+.film-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs) var(--space-md);
+  margin: var(--space-sm) 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.film-meta li:last-child {
+  color: var(--color-star);
+  font-weight: 700;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.genres li {
+  padding: 2px var(--space-sm);
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.genres li:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+
+/* ==========================================================================
+   6. BOUTONS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0.7rem 1.4rem;
+  font-weight: 700;
+  border: 0;
+  border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--color-text);
+  color: #000;
+}
+
+.btn-primary:hover {
+  background: #d9d9d9;
+}
+
+.btn-secondary {
+  background: rgba(109, 109, 110, 0.7);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: rgba(109, 109, 110, 0.45);
+}
+
+.btn[aria-pressed="true"] {
+  background: var(--color-primary);
+}
+
+
+/* ==========================================================================
+   7. GRILLES DE FILMS (mobile : 2 colonnes minimum, auto-adaptatif)
+   ========================================================================== */
+.film-section {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md) 0;
+}
+
+.film-section h2 {
+  margin-bottom: var(--space-md);
+  font-size: var(--fs-lg);
+}
+
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+
+.film-card {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  /* transform/opacity uniquement : animations performantes */
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.film-card:hover,
+.film-card:focus-within {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-card);
+  z-index: 2;
+}
+
+.film-link {
+  display: block;
+  overflow: hidden;
+}
+
+.film-link img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.film-card:hover .film-link img {
+  transform: scale(1.04);
+}
+
+.film-info {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+
+.film-info h3 {
+  font-size: var(--fs-base);
+  line-height: 1.3;
+}
+
+.film-info h3 a:hover,
+.film-info h3 a:focus-visible {
+  color: var(--color-primary);
+}
+
+
+/* ==========================================================================
+   8. FORMULAIRE D'INSCRIPTION
+   ========================================================================== */
+.signup {
+  max-width: 640px;
+  margin: var(--space-xl) auto;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+}
+
+.signup h2 {
+  margin-bottom: var(--space-sm);
+}
+
+.signup form {
+  display: grid;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.signup fieldset {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.signup legend {
+  padding: 0 var(--space-sm);
+  font-weight: 700;
+}
+
+.signup label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.signup input[type="text"],
+.signup input[type="email"],
+.signup input[type="date"],
+.signup input[type="password"] {
+  width: 100%;
+  padding: 0.7rem var(--space-md);
+  background: #333;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.signup input:hover {
+  background: #3d3d3d;
+}
+
+.signup input:focus {
+  border-color: var(--color-text);
+  outline: none;
+}
+
+.signup input:user-invalid {
+  border-color: var(--color-primary);
+}
+
+/* Cases à cocher et boutons radio alignés avec leur label */
+.signup input[type="checkbox"] + label,
+.signup input[type="radio"] + label {
+  display: inline;
+  margin: 0 0 0 var(--space-sm);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.signup input[type="checkbox"],
+.signup input[type="radio"] {
+  accent-color: var(--color-primary);
+}
+
+.signup small {
+  display: block;
+  margin-top: var(--space-xs);
+  color: var(--color-text-muted);
+}
+
+.signup a {
+  text-decoration: underline;
+}
+
+.signup a:hover {
+  color: var(--color-primary);
+}
+
+.signup button {
+  padding: 0.7rem 1.4rem;
+  font-weight: 700;
+  border: 0;
+  border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
+}
+
+.signup button[type="submit"] {
+  background: var(--color-primary);
+}
+
+.signup button[type="submit"]:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.signup button[type="reset"] {
+  background: #444;
+}
+
+.signup button[type="reset"]:hover {
+  background: #555;
+}
+
+
+/* ==========================================================================
+   9. FOOTER (mobile : une colonne)
+   ========================================================================== */
+.site-footer {
+  margin-top: var(--space-xl);
+  padding: var(--space-xl) var(--space-md) var(--space-lg);
+  background: #0a0a0a;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.footer-inner {
+  display: grid;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.site-footer h2 {
+  margin-bottom: var(--space-sm);
+  font-size: var(--fs-base);
+  color: var(--color-text);
+}
+
+.site-footer li {
+  margin-bottom: var(--space-xs);
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.site-footer address {
+  margin-top: var(--space-sm);
+  font-style: normal;
+}
+
+.copyright {
+  max-width: var(--max-width);
+  margin: var(--space-lg) auto 0;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   10. TABLETTE (≥ 768px)
+   ========================================================================== */
+@media (min-width: 768px) {
+  :root {
+    --fs-lg: 1.5rem;
+    --header-height: 72px;
+  }
+
+  .header-inner {
+    flex-wrap: nowrap;
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  /* Le menu repasse sur la même ligne que le logo */
+  #navigation-principale {
+    order: 0;
+    width: auto;
+    margin-right: auto;
+    overflow: visible;
+  }
+
+  .menu a {
+    font-size: var(--fs-base);
+  }
+
+  .search-form input {
+    width: 160px;
+  }
+
+  .search-form input:focus {
+    width: 220px;
+  }
+
+  .hero {
+    min-height: 80vh;
+  }
+
+  .hero-content,
+  .film-section {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+
+  .film-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .signup {
+    padding: var(--space-xl);
+  }
+
+  .footer-inner {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* ==========================================================================
+   11. DESKTOP (≥ 1024px)
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .header-inner,
+  .hero-content,
+  .film-section {
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  .hero {
+    min-height: 90vh;
+  }
+
+  .hero-description {
+    font-size: var(--fs-lg);
+  }
+
+  .film-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  .signup form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Les blocs larges occupent toute la largeur du formulaire */
+  .signup fieldset:first-of-type,
+  .signup form > p {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ==========================================================================
+   12. PRÉFÉRENCES UTILISATEUR : animations réduites
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
